@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="book">
+  <select id="findAll" resultType="bookVO">
+    select bookid, bookname,publisher, price 
+	from (select rownum n, bookid, bookname,publisher, price from 
+	(select * from book 
+	<if test="sidx != ''">
+	   order by ${sidx} ${sord}
+	</if>
+	<if test="sidx == ''">
+	   order by bookid
+	</if>	
+	))
+	where n between #{start} and #{end}
+  </select>
+  
+  <insert id="insert" parameterType="bookVO">
+  	insert into book values(#{bookid},#{bookname},#{publisher},#{price})
+  </insert>
+  
+  <update id="update" parameterType="bookVO">
+  	update book set bookname=#{bookname},publisher=#{publisher},price=#{price} where bookid=#{bookid}
+  </update>
+  
+  <delete id="delete">
+  	delete book where bookid=#{bookid}
+  </delete>
+  
+  <select id="getTotalCount" resultType="java.lang.Integer">
+  	select count(*) from book
+  </select>
+</mapper>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="./jquery-ui/jquery-ui.min.css">
+<link rel="stylesheet" href="./jquery.jqGrid-4.4.3/css/ui.jqgrid.css">
+<script type="text/javascript" src="./jquery.jqGrid-4.4.3/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="./jquery.jqGrid-4.4.3/js/i18n/grid.locale-en.js"></script>
+<script type="text/javascript" src="./jquery.jqGrid-4.4.3/js/jquery.jqGrid.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		
+		let delDialog = {
+			onclickSubmit:function(params){
+				let selectedRow = $("#grid").getGridParam("selrow");
+				rowData = $("#grid").getRowData(selectedRow);
+				return {bookid:rowData.bookid};
+			}	
+		};
+		
+		
+		$("#grid").jqGrid({
+			url:"listBook",  //레코드를 읽어오는 서비스명
+			editurl:"editBook",//레코드를 추가,수정,삭제하는 서비스명		oper:add,edit,del
+			pager:"#pager",
+			caption:"도서목록",
+			height:"100%",
+			rowNum:10,
+			rowList:[5,10,15,20,25],
+			colNames:["bookid","bookname","publisher","price"],
+			colModel:[
+				{name:"bookid",index:"bookid",width:80, editable:true},
+				{name:"bookname",index:"bookname",width:200,editable:true},
+				{name:"publisher",index:"publisher",width:200,editable:true},
+				{name:"price",index:"price",width:100,editable:true}
+			]
+		}).navGrid("#pager",{
+			search:true,
+			edit:true,
+			add:true,
+			del:true
+		},{},{},delDialog);
+	});
+</script>
+</head>
+<body>
+	<table id="grid"></table>
+	<div id="pager"></div>
+	
+</body>
+</html>
